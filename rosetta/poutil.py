@@ -120,7 +120,12 @@ def find_pos(lang, project_apps=True, django_apps=False, third_party_apps=False)
     langs = [lang, ]
     if u'-' in lang:
         _l, _c = map(lambda x: x.lower(), lang.split(u'-'))
-        langs += [u'%s_%s' % (_l, _c), u'%s_%s' % (_l, _c.upper()), ]
+        if len(_c) > 2:
+            # handle script codes like Latn, Hans, Hant, etc.
+            _c = _c.title()
+        else:
+            _c = _c.upper()
+        langs += [u'%s_%s' % (_l, _c)]
     elif u'_' in lang:
         _l, _c = map(lambda x: x.lower(), lang.split(u'_'))
         langs += [u'%s-%s' % (_l, _c), u'%s-%s' % (_l, _c.upper()), ]
